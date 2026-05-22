@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "defense-lab"
+version = "0.1.0"
+description = "SAM/SAM2-inspired foundation-model stack for operational visual understanding"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+# torch is intentionally NOT pinned here: on ARM64/GH200 it is provided by the
+# system/base image (torch 2.7.0+cu128). Pinning would fight that install.
+dependencies = [
+    "numpy>=1.24",
+    "pyyaml>=6.0",
+    "pillow>=10.0",
+    "opencv-python>=4.8",
+    "tqdm>=4.66",
+    "einops>=0.7",
+]
+
+[project.optional-dependencies]
+viz = ["matplotlib>=3.5", "pandas>=2.0"]
+coco = ["pycocotools>=2.0.7"]
+video = ["decord>=0.6; platform_machine != 'aarch64'", "av>=11.0"]
+sam2 = ["sam2 @ git+https://github.com/facebookresearch/sam2.git"]
+lora = ["peft>=0.11", "safetensors>=0.4"]
+dev = ["pytest>=7.4", "ruff>=0.4", "mypy>=1.8"]
+
+[tool.setuptools.packages.find]
+include = ["defense_lab*"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true

@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# vendored source & model weights (large / fetched separately)
+third_party/
+checkpoints/*.pt
+checkpoints/*.pth
+
+# experiment run outputs (reproducible artifacts, not source)
+experiments/*
+!experiments/.gitkeep
+
+# keep directory placeholders
+!**/.gitkeep
