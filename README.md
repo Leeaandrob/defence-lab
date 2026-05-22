@@ -108,3 +108,9 @@ by default; point Phase 6 at a real dataset (`--coco-ann/--coco-images`) to exte
 The prompt/encoder/decoder seams are designed for VLM and geospatial integration
 (GeoChat-style grounding, remote-sensing foundation models, Gaussian-splatting and
 drone imagery) without re-architecting the core.
+
+## Acknowledgments
+
+Developed as part of the Data Science postgraduate program at the
+[STAR Research Institute](https://starresearch.institute/), within its defense
+research group — with thanks to **Carlos Melo** for the mentorship and the group.
