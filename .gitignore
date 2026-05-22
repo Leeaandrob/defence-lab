@@ -15,5 +15,10 @@ checkpoints/*.pth
 experiments/*
 !experiments/.gitkeep
 
+# run logs & generated dashboard (not source)
+*.log
+dashboard/
+data/
+
 # keep directory placeholders
 !**/.gitkeep
