@@ -48,6 +48,7 @@ class TrainableSam2:
         box: Optional[np.ndarray] = None,
         mask_input: Optional[np.ndarray] = None,
         multimask: bool = False,
+        extra_sparse: Optional[torch.Tensor] = None,
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """Returns (masks_full_res_logits[1,C,H,W], iou[1,C], low_res[1,C,256,256])."""
         self.p._orig_hw = [features["orig_hw"]]
@@ -67,6 +68,8 @@ class TrainableSam2:
                 concat_points = (box_coords, box_labels)
 
         sparse, dense = self.model.sam_prompt_encoder(points=concat_points, boxes=None, masks=mask_in)
+        if extra_sparse is not None:  # prompt-tuning: learnable tokens appended to sparse prompts
+            sparse = torch.cat([sparse, extra_sparse.to(sparse.dtype).expand(sparse.shape[0], -1, -1)], dim=1)
         batched_mode = concat_points is not None and concat_points[0].shape[0] > 1
         low_res, iou, _, _ = self.model.sam_mask_decoder(
             image_embeddings=features["image_embed"],
