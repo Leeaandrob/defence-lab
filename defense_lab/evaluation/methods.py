@@ -13,7 +13,7 @@ from typing import Callable, Optional
 import numpy as np
 
 from defense_lab.evaluation.evaluator import EvalSample
-from defense_lab.prompting.prompts import PromptSet
+from defense_lab.prompting.prompts import BoxPrompt, PointPrompt, PromptSet
 from defense_lab.segmentation.predictor import PromptableSegmenter
 
 
@@ -37,6 +37,20 @@ class Sam2PointMethod:
     def predict(self, s: EvalSample) -> np.ndarray:
         self.seg.set_image(s.image)
         return self.seg.predict(PromptSet.from_point(s.point[0], s.point[1], True)).best()[0]
+
+
+class Sam2BoxPointMethod:
+    """Best single-shot SAM2 prompt: box + a positive centroid point together."""
+
+    name = "SAM2 (box + point)"
+
+    def __init__(self, segmenter: PromptableSegmenter) -> None:
+        self.seg = segmenter
+
+    def predict(self, s: EvalSample) -> np.ndarray:
+        self.seg.set_image(s.image)
+        ps = PromptSet(points=PointPrompt().add(s.point[0], s.point[1], True), box=BoxPrompt(*s.box))
+        return self.seg.predict(ps).best()[0]
 
 
 class ClassicalBoxMethod:
