@@ -1,0 +1,26 @@
+# Phase 1 -- Foundation Environment check
+# Override on the CLI, e.g.:
+#   python scripts/phase1_env_check.py precision.matmul_size=8192
+seed: 1234
+deterministic: false
+
+gpu:
+  copy_mib: 256        # transfer size per bandwidth probe
+  iters: 20
+  warmup: 5
+  headroom_warn_gib: 8.0
+
+precision:
+  matmul_size: 4096
+  iters: 30
+  warmup: 10
+  dtypes: [fp32, tf32, fp16, bf16]
+  bf16_check_size: 2048
+
+attention:
+  batch: 2
+  heads: 8
+  seq_len: 2048
+  head_dim: 64
+  iters: 20
+  warmup: 5
