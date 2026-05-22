@@ -113,4 +113,5 @@ drone imagery) without re-architecting the core.
 
 Developed as part of the Data Science postgraduate program at the
 [STAR Research Institute](https://starresearch.institute/), within its defense
-research group — with thanks to **Carlos Melo** for the mentorship and the group.
+research group — with thanks to [Carlos Melo](https://github.com/carlosfab) for the
+mentorship and the group.
