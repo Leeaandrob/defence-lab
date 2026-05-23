@@ -45,6 +45,12 @@ AMG propõe máscaras (sem caixa de GT) → casamento com GT → métricas opera
 → **Quando acha, a máscara é ótima (0.70–0.83). Mas perde a maioria (recall 0.27–0.53) e inunda
 de falsos-positivos (14–66/img).** O problema é localização + FP, não máscara.
 
+**Curva de operação (filtro de score no AMG):** subir o threshold de confiança apenas **troca recall
+por FP** — nunca há ponto bom. Para FP<10 o recall cai pra ~0; a precision satura em **~0.25–0.30** em
+qualquer recall útil; o IoU dos matchados segue alto (0.68–0.87) o tempo todo. → **filtro de score NÃO
+resolve a localização**; é preciso um **localizador aprendido** (detector / prompt-generator), não as
+propostas automáticas do foundation model.
+
 ## Contribuições
 1. **Caracterização**: SAM2 como baseline promptável forte zero-shot em RS (4 datasets).
 2. **Achado quantitativo**: o gargalo é localização automática low-FP, não qualidade de máscara.
@@ -54,8 +60,8 @@ de falsos-positivos (14–66/img).** O problema é localização + FP, não más
    usar detecção + métrica de detecção.
 
 ## Próximos passos (onde está o valor / a oportunidade soberana)
-- Mover a adaptação para o **estágio de localização** (prompt-generator / detector low-FP estilo
-  RSPrompter), não o decoder.
+- **Localizador aprendido** (detector / prompt-generator low-FP estilo RSPrompter), não o decoder
+  nem filtro de score (provado insuficiente). É aqui a contribuição soberana.
 - Métrica operacional: recall/precision + **taxa de falso-positivo** (relevante p/ vigilância/SSA).
 - Domínios com headroom real (SAR fino, alvo faint).
 
