@@ -51,6 +51,23 @@ qualquer recall útil; o IoU dos matchados segue alto (0.68–0.87) o tempo todo
 resolve a localização**; é preciso um **localizador aprendido** (detector / prompt-generator), não as
 propostas automáticas do foundation model.
 
+## 4. Localizador aprendido vs AMG (o fix da tese)
+Foreground-UNet supervisionado propõe regiões → SAM2 refina. Comparado ao AMG, mesmo matching:
+
+| dataset | método | recall | precisão | FP/img | IoU |
+|---|---|---|---|---|---|
+| VDD | AMG | 0.28 | 0.10 | 64.7 | 0.83 |
+| VDD | learned+SAM2 | 0.03 | **0.40** | **1.0** | 0.78 |
+| satélite | AMG | 0.54 | 0.27 | 13.4 | 0.74 |
+| satélite | learned+SAM2 | 0.09 | **0.46** | **1.0** | 0.68 |
+| morocco | AMG | 0.32 | 0.06 | 37.9 | 0.64 |
+| morocco | learned+SAM2 | **0.36** | **0.29** | **6.0** | 0.65 |
+
+→ O localizador aprendido **corta FP 6–60× e multiplica a precisão 4–5×**. Em **morocco vence em todos
+os eixos** (recall ↑, FP 6×↓, precisão 5×↑). Em VDD/satélite ganha precisão/FP mas o recall cai — limite
+de capacidade do UNet 256² (perde objeto pequeno em alta-resolução), não da ideia. **Confirma o lever:
+localização aprendida, não o backbone nem filtro de score.**
+
 ## Contribuições
 1. **Caracterização**: SAM2 como baseline promptável forte zero-shot em RS (4 datasets).
 2. **Achado quantitativo**: o gargalo é localização automática low-FP, não qualidade de máscara.
@@ -61,7 +78,8 @@ propostas automáticas do foundation model.
 
 ## Próximos passos (onde está o valor / a oportunidade soberana)
 - **Localizador aprendido** (detector / prompt-generator low-FP estilo RSPrompter), não o decoder
-  nem filtro de score (provado insuficiente). É aqui a contribuição soberana.
+  nem filtro de score (provado insuficiente). É aqui a contribuição soberana. **Validado**: já corta
+  FP 6–60× vs AMG; próximo gargalo = **recall do localizador** (modelo mais forte / mais dado / maior res).
 - Métrica operacional: recall/precision + **taxa de falso-positivo** (relevante p/ vigilância/SSA).
 - Domínios com headroom real (SAR fino, alvo faint).
 
